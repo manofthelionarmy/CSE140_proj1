@@ -97,6 +97,9 @@ void Simulate () {
         /* Fetch instr at mips.pc, returning it in instr */
         instr = Fetch (mips.pc);
 
+	if(instr == 0x00000000){
+	   exit(0);
+	}
         printf ("Executing instruction at %8.8x: %8.8x\n", mips.pc, instr);
 
         /* 
@@ -133,6 +136,8 @@ void Simulate () {
         RegWrite(&d, val, &changedReg);
 
         PrintInfo (changedReg, changedMem);
+
+	
     }
 }
 
@@ -267,7 +272,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("addu\n");
         return; 
     }
-    if(strcmp(o, "00") == 0 && strcmp(f, "24") == 0){
+    else if(strcmp(o, "00") == 0 && strcmp(f, "24") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -308,7 +313,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("and\n");
         return; 
     }
-    if(strcmp(o, "00") == 0 && strcmp(f, "08") == 0){
+    else if(strcmp(o, "00") == 0 && strcmp(f, "08") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -349,7 +354,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("jr\n");
         return;
     }
-    if(strcmp(o, "00") == 0 && strcmp(f, "25")==0){
+    else if(strcmp(o, "00") == 0 && strcmp(f, "25")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -390,7 +395,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("or\n");
         return;
     }
-    if(strcmp(o, "00") == 0 && strcmp(f, "2a")==0){
+    else if(strcmp(o, "00") == 0 && strcmp(f, "2a")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -431,7 +436,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("slt\n");
         return;
     }
-    if(strcmp(o, "00") == 0 && strcmp(f, "00")==0){
+    else if(strcmp(o, "00") == 0 && strcmp(f, "00")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -472,7 +477,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("sll\n");
         return;
     }
-    if(strcmp(o, "00") == 0 && strcmp(f, "02")==0){
+    else if(strcmp(o, "00") == 0 && strcmp(f, "02")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -513,7 +518,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("srl\n");
         return;
     }
-    if(strcmp(o, "00") == 0 && strcmp(f, "23")==0){
+    else if(strcmp(o, "00") == 0 && strcmp(f, "23")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -559,7 +564,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
       I-format depends on the opcode
     */
     //I-format conditions
-    if(strcmp(o, "09") == 0){
+    else if(strcmp(o, "09") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -592,7 +597,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("addiu\n");
         return;
     }
-    if(strcmp(o, "0c") == 0){
+    else if(strcmp(o, "0c") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -622,7 +627,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("andi\n");
         return;
     }
-    if(strcmp(o, "04") == 0){
+    else if(strcmp(o, "04") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -661,7 +666,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("beq\n");
         return;
     }
-    if(strcmp(o, "05") == 0){
+    else if(strcmp(o, "05") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -701,7 +706,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("bne\n");
         return;
     }
-    if(strcmp(o, "0f") == 0){
+    else if(strcmp(o, "0f") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -730,7 +735,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("lui\n");
     }
-    if(strcmp(o, "23") == 0){
+    else if(strcmp(o, "23") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -760,7 +765,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("lw\n");
         return;
     }
-    if(strcmp(o, "0d") == 0){
+    else if(strcmp(o, "0d") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -791,7 +796,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         return;
     }
    
-    if(strcmp(o, "2b") == 0){
+    else if(strcmp(o, "2b") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -827,7 +832,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
     */ 
 
     //J-Format
-    if(strcmp(o, "02") == 0){
+    else if(strcmp(o, "02") == 0){
        //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -850,7 +855,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("j\n"); 
         return;
     }
-    if(strcmp(o, "03") == 0){
+    else if(strcmp(o, "03") == 0){
        //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -873,7 +878,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("jal\n");
         return;
     }
-    printf("Unsupported instruction\n");
+    else{
+	 d->type = NONE; //an unsupported instruction
+    }
+    
+    //printf("Unsupported instruction\n");
     return; 
 }
 
@@ -892,35 +901,35 @@ void PrintInstruction ( DecodedInstr* d) {
       char f[6]; 
       sprintf(f, "%2.2x", d->regs.r.funct);
       if(strcmp(f, "21") == 0){
-	printf("addu $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	printf("addu $%u, $%u, $%u\n", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
 	return;
       }
       if(strcmp(f, "24") == 0){
-	printf("and $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	printf("and $%u, $%u, $%u\n", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
 	return;
       }
       if(strcmp(f, "08") == 0){
-	printf("jr $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	printf("jr $%u\n", d->regs.r.rs);
 	return;
       }
       if(strcmp(f, "25") == 0){
-	printf("or $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	printf("or $%u, $%u, $%u\n", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
 	return;
       }
       if(strcmp(f, "2a") == 0){
-	printf("slt $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	printf("slt $%u, $%u, $%u\n", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
 	return;
       }
       if(strcmp(f, "00") == 0){
-	printf("sll $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	printf("sll $%u, $%u, $%u\n", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
 	return;
       }
       if(strcmp(f, "02") == 0){
-	printf("srl $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	printf("srl $%u, $%u, $%u\n", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
 	return;
       }
       if(strcmp(f, "23") == 0){
-	printf("subu $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	printf("subu $%u, $%u, $%u\n", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
 	return;
       }	
      
@@ -1138,20 +1147,25 @@ void PrintInstruction ( DecodedInstr* d) {
 					d->regs.i.addr_or_immed);
 	return;
       }
+	
       return;
     }
     else if(d->type == J){
 
       if(strcmp(o, "02") == 0){
+	printf("j 0x%8.8x\n", d->regs.j.target);
 	return;
       }
       if(strcmp(o, "03") == 0){
+	printf("jal 0x%8.8x\n", d->regs.j.target);
 	return;
       }
       return;
     }
     else{
-	printf("Unsupported instruction\n");
+	//There's an unsupported instruction, so terminate as stated in the example
+	exit(0);
+	return;
     }
     
 }

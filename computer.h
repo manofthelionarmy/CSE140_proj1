@@ -10,7 +10,7 @@ struct SimulatedComputer {
 };
 typedef struct SimulatedComputer Computer;
 
-typedef enum { R=0, I, J } InstrType;
+typedef enum { R=0, I, J, NONE } InstrType;
 
 typedef struct {
   int rs;
