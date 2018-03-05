@@ -219,50 +219,494 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 
     //R-format conditions
     if(strcmp(o, "0") == 0 && strcmp(f, "20") == 0){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
  	printf("add\n");
         return; 
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "21")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("addu\n");
         return; 
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "24")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("and\n");
         return; 
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "08")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("jr\n");
         return;
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "27")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("nor\n");
         return;
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "25")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("or\n");
         return;
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "2a")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("slt\n");
         return;
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "2b")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("sltu\n");
         return;
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "00")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("sll\n");
         return;
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "02")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("srl\n");
         return;
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "22")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("sub\n");
         return;
     }
     if(strcmp(o, "0") == 0 && strcmp(f, "23")){
+	//Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = R;
+        //Extracting rs from instruction 
+        unsigned rs = createMask(21, 25); 
+	rs = rs & instr; 
+        rs = rs >> 21; 
+        printf("Rs:%u\n", rs);
+	//Extracting rt from instruction
+	unsigned rt = createMask(16, 20); 
+        rt = rt & instr; 
+        rt = rt >> 16; 
+        printf("Rt:%u\n", rt); 
+	//Extracting immediate or address from instruction
+	unsigned rd = createMask(11,15); 
+        rd = rd & instr; 
+	rd = rd >> 11; 
+        printf("Rd:%u\n", rd); 
+	unsigned shamt = createMask(6, 10); 
+	shamt = shamt & instr; 
+	shamt = shamt >> 6; 
+	//funct was retrieved earlier so ....
+
+        //Setting rs register
+	d->regs.r.rs = rs; 
+	//Setting rt register
+	d->regs.r.rt = rt;
+	//Setting rd register
+	d->regs.r.rd = rd;
+	//Setting shamt register
+	d->regs.r.shamt = shamt; 
+	//Setting funct register
+	d->regs.r.funct = funct; 
+        //Testing if decoded properly
+	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("subu\n");
         return;
     }
