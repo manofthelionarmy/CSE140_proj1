@@ -259,7 +259,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("add\n");
         return; 
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "21")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "21") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -300,7 +300,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("addu\n");
         return; 
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "24")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "24") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -341,7 +341,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("and\n");
         return; 
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "08")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "08") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -382,7 +382,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("jr\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "27")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "27") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -423,7 +423,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("nor\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "25")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "25")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -464,7 +464,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("or\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "2a")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "2a")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -505,7 +505,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("slt\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "2b")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "2b")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -546,7 +546,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("sltu\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "00")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "00")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -587,7 +587,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("sll\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "02")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "02")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -628,7 +628,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("srl\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "22")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "22")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -650,7 +650,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
-	shamt = shamt >> 6; 
+	shamt = shamt >> 6;
 	//funct was retrieved earlier so ....
 
         //Setting rs register
@@ -669,7 +669,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("sub\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "23")){
+    if(strcmp(o, "0") == 0 && strcmp(f, "23")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -1231,12 +1231,50 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 
     //J-Format
     if(strcmp(o, "2") == 0){
-       printf("j\n"); 
-       return;
+       //Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = J;
+        //Extracting address from instruction 
+	//Calculation comes from this source: https://stackoverflow.com/questions/6950230/how-to-calculate-jump-target-address-and-branch-target-address
+        unsigned address = createMask(0, 25);
+	address = address & instr; 
+	//Multiply jump address by 4
+	address = address << 2;
+	//Extracting first four bits of pc
+	unsigned first_four_bits = createMask(28, 31); 
+	first_four_bits = first_four_bits & mips.pc; 
+	//Concatenating the bits
+	address = address | first_four_bits;
+        printf("Address: %8.8x\n", address);
+	//Setting target
+	d->regs.j.target = address; 
+	printf("%u %8.8x\n", d->op, d->regs.j.target);
+        printf("j\n"); 
+        return;
     }
     if(strcmp(o, "3") == 0){
-       printf("jal\n");
-       return;
+       //Setting the opcode
+ 	d->op = result;
+	//Setting the Instruction Type
+	d->type = J;
+        //Extracting address from instruction 
+	//Calculation comes from this source: https://stackoverflow.com/questions/6950230/how-to-calculate-jump-target-address-and-branch-target-address
+        unsigned address = createMask(0, 25);
+	address = address & instr; 
+	//Multiply jump address by 4
+	address = address << 2;
+	//Extracting first four bits of pc
+	unsigned first_four_bits = createMask(28, 31); 
+	first_four_bits = first_four_bits & mips.pc; 
+	//Concatenating the bits
+	address = address | first_four_bits;
+        printf("Address: %8.8x\n", address);
+	//Setting target
+	d->regs.j.target = address; 
+	printf("%u %8.8x\n", d->op, d->regs.j.target);
+        printf("jal\n");
+        return;
     }
     return; 
 }
