@@ -3,6 +3,7 @@
 #include <netinet/in.h>
 #include "computer.h"
 #include "string.h"
+#include <stdint.h>
 #undef mips			/* gcc already has a def for mips */
 
 unsigned int endianSwap(unsigned int);
@@ -16,6 +17,13 @@ void RegWrite(DecodedInstr*, int, int *);
 void UpdatePC(DecodedInstr*, int);
 void PrintInstruction (DecodedInstr*);
 unsigned createMask(unsigned a, unsigned b);
+//macro provided at: https://stackoverflow.com/questions/523724/c-c-check-if-one-bit-is-set-in-i-e-int-variable
+#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+
+int32_t signExtension(int32_t instr) {
+    int16_t value = (int16_t)instr;
+    return (int32_t)value;
+}
 
 /*Globally accessible Computer variable*/
 Computer mips;
@@ -207,8 +215,8 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
     unsigned funct = r & instr;    
 
     //store the calculated values into char* 
-    sprintf(o, "%x", result);
-    sprintf(f, "%x", funct);
+    sprintf(o, "%2.2x", result);
+    sprintf(f, "%2.2x", funct);
     printf("The instruction opcode value is %s\n", o);
     printf("The funct/immediate value is %s\n", f);
 
@@ -218,48 +226,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
     */
 
     //R-format conditions
-    if(strcmp(o, "0") == 0 && strcmp(f, "20") == 0){
-	//Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-	d->type = R;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned rd = createMask(11,15); 
-        rd = rd & instr; 
-	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
-	unsigned shamt = createMask(6, 10); 
-	shamt = shamt & instr; 
-	shamt = shamt >> 6; 
-	//funct was retrieved earlier so ....
-
-        //Setting rs register
-	d->regs.r.rs = rs; 
-	//Setting rt register
-	d->regs.r.rt = rt;
-	//Setting rd register
-	d->regs.r.rd = rd;
-	//Setting shamt register
-	d->regs.r.shamt = shamt; 
-	//Setting funct register
-	d->regs.r.funct = funct; 
-        //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
- 	printf("add\n");
-        return; 
-    }
-    if(strcmp(o, "0") == 0 && strcmp(f, "21") == 0){
+    if(strcmp(o, "00") == 0 && strcmp(f, "21") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -300,7 +267,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("addu\n");
         return; 
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "24") == 0){
+    if(strcmp(o, "00") == 0 && strcmp(f, "24") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -341,7 +308,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("and\n");
         return; 
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "08") == 0){
+    if(strcmp(o, "00") == 0 && strcmp(f, "08") == 0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -382,48 +349,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("jr\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "27") == 0){
-	//Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-	d->type = R;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned rd = createMask(11,15); 
-        rd = rd & instr; 
-	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
-	unsigned shamt = createMask(6, 10); 
-	shamt = shamt & instr; 
-	shamt = shamt >> 6; 
-	//funct was retrieved earlier so ....
-
-        //Setting rs register
-	d->regs.r.rs = rs; 
-	//Setting rt register
-	d->regs.r.rt = rt;
-	//Setting rd register
-	d->regs.r.rd = rd;
-	//Setting shamt register
-	d->regs.r.shamt = shamt; 
-	//Setting funct register
-	d->regs.r.funct = funct; 
-        //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
-        printf("nor\n");
-        return;
-    }
-    if(strcmp(o, "0") == 0 && strcmp(f, "25")==0){
+    if(strcmp(o, "00") == 0 && strcmp(f, "25")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -464,7 +390,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("or\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "2a")==0){
+    if(strcmp(o, "00") == 0 && strcmp(f, "2a")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -505,48 +431,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("slt\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "2b")==0){
-	//Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-	d->type = R;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned rd = createMask(11,15); 
-        rd = rd & instr; 
-	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
-	unsigned shamt = createMask(6, 10); 
-	shamt = shamt & instr; 
-	shamt = shamt >> 6; 
-	//funct was retrieved earlier so ....
-
-        //Setting rs register
-	d->regs.r.rs = rs; 
-	//Setting rt register
-	d->regs.r.rt = rt;
-	//Setting rd register
-	d->regs.r.rd = rd;
-	//Setting shamt register
-	d->regs.r.shamt = shamt; 
-	//Setting funct register
-	d->regs.r.funct = funct; 
-        //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
-        printf("sltu\n");
-        return;
-    }
-    if(strcmp(o, "0") == 0 && strcmp(f, "00")==0){
+    if(strcmp(o, "00") == 0 && strcmp(f, "00")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -587,7 +472,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("sll\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "02")==0){
+    if(strcmp(o, "00") == 0 && strcmp(f, "02")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -628,48 +513,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("srl\n");
         return;
     }
-    if(strcmp(o, "0") == 0 && strcmp(f, "22")==0){
-	//Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-	d->type = R;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned rd = createMask(11,15); 
-        rd = rd & instr; 
-	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
-	unsigned shamt = createMask(6, 10); 
-	shamt = shamt & instr; 
-	shamt = shamt >> 6;
-	//funct was retrieved earlier so ....
-
-        //Setting rs register
-	d->regs.r.rs = rs; 
-	//Setting rt register
-	d->regs.r.rt = rt;
-	//Setting rd register
-	d->regs.r.rd = rd;
-	//Setting shamt register
-	d->regs.r.shamt = shamt; 
-	//Setting funct register
-	d->regs.r.funct = funct; 
-        //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
-        printf("sub\n");
-        return;
-    }
-    if(strcmp(o, "0") == 0 && strcmp(f, "23")==0){
+    if(strcmp(o, "00") == 0 && strcmp(f, "23")==0){
 	//Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -715,37 +559,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
       I-format depends on the opcode
     */
     //I-format conditions
-    if(strcmp(o, "8") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-	d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("addi\n");
-        return;
-    }
-    if(strcmp(o, "9") == 0){
+    if(strcmp(o, "09") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -761,9 +575,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         rt = rt >> 16; 
         printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
+	unsigned addr_or_immed = createMask(0,15);
+	/*unsigned first_bit = createMask(15,15);
+	first_bit = first_bit & addr_or_immed;  
+	printf("The first bit: %x\n", first_bit);*/ 
         addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
+        printf("Addr or Immed:%x\n", (addr_or_immed)); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -771,11 +588,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
         //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+	printf("%u %u %x\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("addiu\n");
         return;
     }
-    if(strcmp(o, "c") == 0){
+    if(strcmp(o, "0c") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -805,7 +622,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("andi\n");
         return;
     }
-    if(strcmp(o, "4") == 0){
+    if(strcmp(o, "04") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -820,9 +637,18 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         rt = rt & instr; 
         rt = rt >> 16; 
         printf("Rt:%u\n", rt); 
+
 	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
+	signed addr_or_immed = createMask(0,15);
         addr_or_immed = addr_or_immed & instr; 
+
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	//Sign extend to preserve value
+	addr_or_immed = value;
+	//Multiply branch target by 4
+	addr_or_immed = addr_or_immed << 2;
+	//Add value to PC+4;
+	addr_or_immed = addr_or_immed + (mips.pc + 4);
         printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
@@ -835,7 +661,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("beq\n");
         return;
     }
-    if(strcmp(o, "5") == 0){
+    if(strcmp(o, "05") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -851,8 +677,18 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         rt = rt >> 16; 
         printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
+	signed addr_or_immed = createMask(0,15);
         addr_or_immed = addr_or_immed & instr; 
+
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	//Sign extend to preserve value
+	addr_or_immed = value;
+	//Multiply branch target by 4
+	addr_or_immed = addr_or_immed << 2;
+	//Add value to PC+4;
+	addr_or_immed = addr_or_immed + (mips.pc + 4);
+
+
         printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
@@ -865,97 +701,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("bne\n");
         return;
     }
-    if(strcmp(o, "24") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-        d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("lbu\n");
-        return;
-    }
-    if(strcmp(o, "25") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-        d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("lhu\n");
-        return;
-    }
-    if(strcmp(o, "30") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-        d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("ll\n");
-        return;
-    }
-    if(strcmp(o, "f") == 0){
+    if(strcmp(o, "0f") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -1014,7 +760,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("lw\n");
         return;
     }
-    if(strcmp(o, "d") == 0){
+    if(strcmp(o, "0d") == 0){
         //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -1044,156 +790,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  	printf("ori\n");
         return;
     }
-    if(strcmp(o, "a") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-        d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("slti\n");
-        return;
-    }
-    if(strcmp(o, "b") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-        d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("sltiu\n");
-        return;
-    }
-    if(strcmp(o, "28") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-        d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("sb\n");
-        return;
-    }
-    if(strcmp(o, "38") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-       	d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("sc\n");
-        return;
-    }
-    if(strcmp(o, "29") == 0){
-        //Setting the opcode
- 	d->op = result;
-	//Setting the Instruction Type
-        d->type = I;
-        //Extracting rs from instruction 
-        unsigned rs = createMask(21, 25); 
-	rs = rs & instr; 
-        rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
-	//Extracting rt from instruction
-	unsigned rt = createMask(16, 20); 
-        rt = rt & instr; 
-        rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
-	//Extracting immediate or address from instruction
-	unsigned addr_or_immed = createMask(0,15); 
-        addr_or_immed = addr_or_immed & instr; 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
-        //Setting rs register
-	d->regs.i.rs = rs; 
-	//Setting rt register
-	d->regs.i.rt = rt;
-	//Setting immediate value
-	d->regs.i.addr_or_immed = addr_or_immed;
-        //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("sh\n");
-        return;
-    }
+   
     if(strcmp(o, "2b") == 0){
         //Setting the opcode
  	d->op = result;
@@ -1230,7 +827,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
     */ 
 
     //J-Format
-    if(strcmp(o, "2") == 0){
+    if(strcmp(o, "02") == 0){
        //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -1253,7 +850,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("j\n"); 
         return;
     }
-    if(strcmp(o, "3") == 0){
+    if(strcmp(o, "03") == 0){
        //Setting the opcode
  	d->op = result;
 	//Setting the Instruction Type
@@ -1276,6 +873,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("jal\n");
         return;
     }
+    printf("Unsupported instruction\n");
     return; 
 }
 
@@ -1285,11 +883,317 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
  */
 void PrintInstruction ( DecodedInstr* d) {
     /* Your code goes here */
+    char o[6]; 
+    sprintf(o, "%2.2x", d->op);
+    
+    if(d->type == R){
+      //All R-format instructions have an opcode with value 0
+      //Therefore, only need to check the function
+      char f[6]; 
+      sprintf(f, "%2.2x", d->regs.r.funct);
+      if(strcmp(f, "21") == 0){
+	printf("addu $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	return;
+      }
+      if(strcmp(f, "24") == 0){
+	printf("and $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	return;
+      }
+      if(strcmp(f, "08") == 0){
+	printf("jr $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	return;
+      }
+      if(strcmp(f, "25") == 0){
+	printf("or $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	return;
+      }
+      if(strcmp(f, "2a") == 0){
+	printf("slt $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	return;
+      }
+      if(strcmp(f, "00") == 0){
+	printf("sll $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	return;
+      }
+      if(strcmp(f, "02") == 0){
+	printf("srl $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	return;
+      }
+      if(strcmp(f, "23") == 0){
+	printf("subu $%u, $%u, $%u", d->regs.r.rd, d->regs.r.rs, d->regs.r.rt);
+	return;
+      }	
+     
+    }
+    else if(d->type == I){
+      if(strcmp(o, "09") == 0){
+	//Extracting first bit to from left most side
+	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	 	 
+	   //Performing ~ operator will not give us the correct value
+	   //Perform XOR operation to give us the "correct complement"
+	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
+	   //If the complement is "0"it is -1
+	   if(value == 0){
+		value = ~value;
+	   }
+	   //If not, then take 2's complement
+	   else
+	   {
+		value = ~value + 1 ;
+	   }
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
+	printf("addiu $%u, $%u, $%i\n", d->regs.i.rt, d->regs.i.rs, d->regs.i.addr_or_immed);
+	return;
+      }
+      if(strcmp(o, "0c") == 0){
+	//Extracting first bit to from left most side
+	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	 	 
+	   //Performing ~ operator will not give us the correct value
+	   //Perform XOR operation to give us the "correct complement"
+	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
+	   //If the complement is "0"it is -1
+	   if(value == 0){
+		value = ~value;
+	   }
+	   //If not, then take 2's complement
+	   else
+	   {
+		value = ~value + 1 ;
+	   }
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
+	printf("andi $%u, $%u, $%i\n", d->regs.i.rt, d->regs.i.rs, d->regs.i.addr_or_immed);
+	return;
+      }
+      if(strcmp(o, "04") == 0){
+	//Extracting first bit to from left most side
+	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	 	 
+	   //Performing ~ operator will not give us the correct value
+	   //Perform XOR operation to give us the "correct complement"
+	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
+           printf("true\n");
+	   //If the complement is "0"it is -1
+	   if(value == 0){
+		value = ~value;
+	   }
+	   //If not, then take 2's complement
+	   else
+	   {
+		value = ~value + 1 ;
+	   }
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
+	printf("beq $%u, $%u, $0x%8.8x\n", d->regs.i.rs, d->regs.i.rt, 
+					d->regs.i.addr_or_immed);
+	return;
+      }
+      if(strcmp(o, "05") == 0){
+	//Extracting first bit to from left most side
+	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	 	 
+	   //Performing ~ operator will not give us the correct value
+	   //Perform XOR operation to give us the "correct complement"
+	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
+           printf("true\n");
+	   //If the complement is "0"it is -1
+	   if(value == 0){
+		value = ~value;
+	   }
+	   //If not, then take 2's complement
+	   else
+	   {
+		value = ~value + 1 ;
+	   }
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
+	printf("bne $%u, $%u, $0x%8.8x\n", d->regs.i.rs, d->regs.i.rt, 
+					d->regs.i.addr_or_immed);
+	return;
+      }
+      if(strcmp(o, "0f") == 0){
+	//Extracting first bit to from left most side
+	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	 	 
+	   //Performing ~ operator will not give us the correct value
+	   //Perform XOR operation to give us the "correct complement"
+	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
+           printf("true\n");
+	   //If the complement is "0"it is -1
+	   if(value == 0){
+		value = ~value;
+	   }
+	   //If not, then take 2's complement
+	   else
+	   {
+		value = ~value + 1 ;
+	   }
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
+	printf("lui $%u, $%u, $0x%8.8x\n", d->regs.i.rt, d->regs.i.rs, 
+					d->regs.i.addr_or_immed);
+	return;
+      }
+      if(strcmp(o, "23") == 0){
+	//Extracting first bit to from left most side
+	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	 	 
+	   //Performing ~ operator will not give us the correct value
+	   //Perform XOR operation to give us the "correct complement"
+	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
+           printf("true\n");
+	   //If the complement is "0"it is -1
+	   if(value == 0){
+		value = ~value;
+	   }
+	   //If not, then take 2's complement
+	   else
+	   {
+		value = ~value + 1 ;
+	   }
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
+	printf("lw $%u, $%u, $0x%8.8x\n", d->regs.i.rt, d->regs.i.rs, 
+					d->regs.i.addr_or_immed);
+	return;
+      }
+      if(strcmp(o, "0d") == 0){
+	//Extracting first bit to from left most side
+	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	 	 
+	   //Performing ~ operator will not give us the correct value
+	   //Perform XOR operation to give us the "correct complement"
+	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
+           printf("true\n");
+	   //If the complement is "0"it is -1
+	   if(value == 0){
+		value = ~value;
+	   }
+	   //If not, then take 2's complement
+	   else
+	   {
+		value = ~value + 1 ;
+	   }
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
+	printf("ori $%u, $%u, $0x%8.8x\n", d->regs.i.rt, d->regs.i.rs, 
+					d->regs.i.addr_or_immed);
+	return;
+      }
+      if(strcmp(o, "2b") == 0){
+	//Extracting first bit to from left most side
+	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	 	 
+	   //Performing ~ operator will not give us the correct value
+	   //Perform XOR operation to give us the "correct complement"
+	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
+           printf("true\n");
+	   //If the complement is "0"it is -1
+	   if(value == 0){
+		value = ~value;
+	   }
+	   //If not, then take 2's complement
+	   else
+	   {
+		value = ~value + 1 ;
+	   }
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
+	printf("sw $%u, $%u, $0x%8.8x\n", d->regs.i.rt, d->regs.i.rs, 
+					d->regs.i.addr_or_immed);
+	return;
+      }
+      return;
+    }
+    else if(d->type == J){
+
+      if(strcmp(o, "02") == 0){
+	return;
+      }
+      if(strcmp(o, "03") == 0){
+	return;
+      }
+      return;
+    }
+    else{
+	printf("Unsupported instruction\n");
+    }
+    
 }
 
 /* Perform computation needed to execute d, returning computed value */
 int Execute ( DecodedInstr* d, RegVals* rVals) {
     /* Your code goes here */
+    //this train of thought is most needed for execute
+    /*char *o; 
+    sprintf(o, "%x", d->op);
+    
+    if(d->type == R){
+      //All R-format instructions have an opcode with value 0
+      //Therefore, only need to check the function
+      char *f; 
+      sprintf(f, "%x", d->regs.r.funct);
+      if(strcmp(f, "20") == 0){
+	return;
+      }
+      if(strcmp(f, "20") == 0){
+	return;
+      }
+      if(strcmp(f, "20") == 0){
+	return;
+      }
+      if(strcmp(f, "20") == 0){
+	return;
+      }
+      if(strcmp(f, "20") == 0){
+	return;
+      }
+      if(strcmp(f, "20") == 0){
+	return;
+      }	
+     
+    }
+    if(d->type == I){
+      return;
+    }
+    if(d->type == J){
+      return;
+    }*/
   return 0;
 }
 
