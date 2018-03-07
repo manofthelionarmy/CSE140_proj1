@@ -97,9 +97,9 @@ void Simulate () {
         /* Fetch instr at mips.pc, returning it in instr */
         instr = Fetch (mips.pc);
 
-	if(instr == 0x00000000){
+	/*if(instr == 0x00000000){
 	   exit(0);
-	}
+	}*/
         printf ("Executing instruction at %8.8x: %8.8x\n", mips.pc, instr);
 
         /* 
@@ -204,8 +204,8 @@ unsigned createMask(unsigned a, unsigned b){
 /* Decode instr, returning decoded instruction. */
 void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
     /* Your code goes here */
+
     //opcode 
-    
     char o[6];
     //funct
     char f[6];
@@ -269,6 +269,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
 				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.r.rd;
+	rVals->R_rs = d->regs.r.rs; 
+	rVals->R_rt = d->regs.r.rt; 
+
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
         printf("addu\n");
         return; 
     }
@@ -310,6 +319,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
 				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.r.rd;
+	rVals->R_rs = d->regs.r.rs; 
+	rVals->R_rt = d->regs.r.rt;
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         printf("and\n");
         return; 
     }
@@ -351,6 +369,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
 				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.r.rd;
+	rVals->R_rs = d->regs.r.rs; 
+	rVals->R_rt = d->regs.r.rt;
+
+	printf("RegsVals: rd: %u rs:%8.8x rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         printf("jr\n");
         return;
     }
@@ -392,6 +419,14 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
 				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.r.rd;
+	rVals->R_rs = d->regs.r.rs; 
+	rVals->R_rt = d->regs.r.rt; 
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
         printf("or\n");
         return;
     }
@@ -434,6 +469,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
 				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("slt\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.r.rd;
+	rVals->R_rs = d->regs.r.rs; 
+	rVals->R_rt = d->regs.r.rt; 
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         return;
     }
     else if(strcmp(o, "00") == 0 && strcmp(f, "00")==0){
@@ -475,6 +519,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
 				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("sll\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.r.rd;
+	rVals->R_rs = d->regs.r.rs; 
+	rVals->R_rt = d->regs.r.rt; 
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         return;
     }
     else if(strcmp(o, "00") == 0 && strcmp(f, "02")==0){
@@ -516,6 +569,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
 				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
         printf("srl\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.r.rd;
+	rVals->R_rs = d->regs.r.rs; 
+	rVals->R_rt = d->regs.r.rt; 
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+ 
+
         return;
     }
     else if(strcmp(o, "00") == 0 && strcmp(f, "23")==0){
@@ -556,7 +618,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
 				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.r.rd;
+	rVals->R_rs = d->regs.r.rs; 
+	rVals->R_rt = d->regs.r.rt; 
+
         printf("subu\n");
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         return;
     }
     /*
@@ -595,6 +667,14 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %x\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("addiu\n");
+	
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.i.rt;
+	rVals->R_rs = d->regs.i.rs; 
+	rVals->R_rt = d->regs.i.addr_or_immed; 
+	
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
         return;
     }
     else if(strcmp(o, "0c") == 0){
@@ -625,6 +705,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("andi\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.i.rt;
+	rVals->R_rs = d->regs.i.rs; 
+	rVals->R_rt = d->regs.i.addr_or_immed; 
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         return;
     }
     else if(strcmp(o, "04") == 0){
@@ -664,6 +753,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("beq\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.i.rs;
+	rVals->R_rs = d->regs.i.rt; 
+	rVals->R_rt = d->regs.i.addr_or_immed; 
+	
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         return;
     }
     else if(strcmp(o, "05") == 0){
@@ -704,6 +802,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("bne\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.i.rs;
+	rVals->R_rs = d->regs.i.rt; 
+	rVals->R_rt = d->regs.i.addr_or_immed; 
+	
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         return;
     }
     else if(strcmp(o, "0f") == 0){
@@ -734,6 +841,16 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("lui\n");
+	
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.i.rt;
+	rVals->R_rs = d->regs.i.rs; 
+	rVals->R_rt = d->regs.i.addr_or_immed; 	
+	
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
+	return;
     }
     else if(strcmp(o, "23") == 0){
         //Setting the opcode
@@ -763,6 +880,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("lw\n");
+	
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.i.rt;
+	rVals->R_rs = d->regs.i.rs; 
+	rVals->R_rt = d->regs.i.addr_or_immed; 
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+
         return;
     }
     else if(strcmp(o, "0d") == 0){
@@ -793,6 +919,16 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("ori\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.i.rt;
+	rVals->R_rs = d->regs.i.rs; 
+	rVals->R_rt = d->regs.i.addr_or_immed; 
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
+	
+	
         return;
     }
    
@@ -824,6 +960,14 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("sw\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.i.rt;
+	rVals->R_rs = d->regs.i.rs; 
+	rVals->R_rt = d->regs.i.addr_or_immed; 
+
+	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+
         return;
     }
     /*
@@ -853,6 +997,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	d->regs.j.target = address; 
 	printf("%u %8.8x\n", d->op, d->regs.j.target);
         printf("j\n"); 
+	
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.j.target;
+
+	printf("RegsVals: rd: %8.8x\n", rVals->R_rd);
+
         return;
     }
     else if(strcmp(o, "03") == 0){
@@ -876,6 +1026,14 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	d->regs.j.target = address; 
 	printf("%u %8.8x\n", d->op, d->regs.j.target);
         printf("jal\n");
+
+	//Need to get rVals updated
+	rVals->R_rd = d->regs.j.target;
+	//jal jumps to another registes and saves the return dress, $31
+	mips.registers[31] = mips.pc; 
+
+	printf("RegsVals: rd: %8.8x\n", rVals->R_rd);
+
         return;
     }
     else{
@@ -1164,7 +1322,7 @@ void PrintInstruction ( DecodedInstr* d) {
     }
     else{
 	//There's an unsupported instruction, so terminate as stated in the example
-	exit(0);
+	//exit(0);
 	return;
     }
     
@@ -1174,40 +1332,62 @@ void PrintInstruction ( DecodedInstr* d) {
 int Execute ( DecodedInstr* d, RegVals* rVals) {
     /* Your code goes here */
     //this train of thought is most needed for execute
-    /*char *o; 
-    sprintf(o, "%x", d->op);
+    char o[6]; 
+    sprintf(o, "%2.2x", d->op);
     
     if(d->type == R){
       //All R-format instructions have an opcode with value 0
       //Therefore, only need to check the function
-      char *f; 
-      sprintf(f, "%x", d->regs.r.funct);
-      if(strcmp(f, "20") == 0){
-	return;
+      char f[6]; 
+      sprintf(f, "%2.2x", d->regs.r.funct);
+      if(strcmp(f, "21") == 0){
+	
+	//Return the computed value
+	//mips.registers[changedReg] = rVals->R_rs + rVals->R_rt; 
+	
+	return rVals->R_rs + rVals->R_rt; 
       }
-      if(strcmp(f, "20") == 0){
-	return;
+      if(strcmp(f, "24") == 0){
+	
+	//return the computed value
+	
+	return rVals->R_rs & rVals->R_rt; 
       }
-      if(strcmp(f, "20") == 0){
-	return;
+      if(strcmp(f, "08") == 0){
+	/*Not sure if this needs to be updated, but the pc will get updated to whatever 
+	  source*/
+	/*No, doesn't need to be updated*, just need to return the value stored in 
+	  the register at R_rs*/
+	return mips.registers[rVals->R_rs];  
       }
-      if(strcmp(f, "20") == 0){
-	return;
+      if(strcmp(f, "25") == 0){
+	
+	return rVals->R_rs | rVals->R_rt;  
       }
-      if(strcmp(f, "20") == 0){
-	return;
+      if(strcmp(f, "29") == 0){
+	
+	return (rVals->R_rs < rVals->R_rt ? 1 : 0); 
       }
-      if(strcmp(f, "20") == 0){
-	return;
+      if(strcmp(f, "00") == 0){
+	
+	return rVals->R_rs << rVals->R_rt; 
+      }
+      if(strcmp(f, "02") == 0){
+	
+	return rVals->R_rs >> rVals->R_rt;
       }	
+      if(strcmp(f, "23") == 0){
+	
+	return rVals->R_rs - rVals->R_rt;
+      }		
      
     }
-    if(d->type == I){
-      return;
+    else if(d->type == I){
+      return 0;
     }
-    if(d->type == J){
-      return;
-    }*/
+    else if(d->type == J){
+      return 0;
+    }
   return 0;
 }
 
