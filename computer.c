@@ -1331,7 +1331,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 a = rVals->R_rd;
 	 b = rVals->R_rs;
 	 printf("Rd:%i, Rs:%i\n", rVals->R_rd, rVals->R_rs);
-	 return ((mips.registers[a] - mips.registers[b]) == 0 ? rVals->R_rt : mips.pc + 4); 
+	 return ((mips.registers[a] - mips.registers[b]) == 0 ? rVals->R_rt : mips.pc); 
 	}
 	if(strcmp(o, "05") == 0){
 	 int a = 0;
@@ -1339,7 +1339,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 a = rVals->R_rd;
 	 b = rVals->R_rs;
 	 printf("Rd:%i, Rs:%i\n", rVals->R_rd, rVals->R_rs);
-	 return ((mips.registers[a] - mips.registers[b]) != 0 ? rVals->R_rt : mips.pc + 4); 
+	 return ((mips.registers[a] - mips.registers[b]) != 0 ? rVals->R_rt : mips.pc); 
 	}
 	if(strcmp(o, "0f") == 0){
 	
@@ -1373,7 +1373,18 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 
     }
     else if(d->type == J){
-      return 0;
+      if(strcmp(o, "02") == 0){
+	//return the target address
+	printf("%8.8x\n", rVals->R_rd);
+	return rVals->R_rd;
+      }
+      if(strcmp(o, "03") == 0){
+	//update register address
+	mips.registers[31] = mips.pc;
+	//return the target address
+	printf("%8.8x\n", rVals->R_rd);
+	return rVals->R_rd;
+      }
     }
   return 0;
 }
