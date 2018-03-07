@@ -1379,7 +1379,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	return rVals->R_rd;
       }
       if(strcmp(o, "03") == 0){
-	//update register address
+	//update return address
 	mips.registers[31] = mips.pc;
 	//return the target address
 	printf("%8.8x\n", rVals->R_rd);
@@ -1395,8 +1395,48 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
  * increments by 4 (which we have provided).
  */
 void UpdatePC ( DecodedInstr* d, int val) {
-    mips.pc+=4;
+    
     /* Your code goes here */
+    char o[6];
+    char f[6];
+    sprintf(o, "%2.2x", d->op); 
+    sprintf(f, "%2.2x", d->regs.r.funct);
+    if(strcmp(o, "04") == 0){
+	//beq
+	printf("pc = %8.8x\n", val);
+	mips.pc = val + 4; 
+	return;
+    }
+    else if(strcmp(o, "05") == 0){
+	//bne
+	printf("pc = %8.8x", val);
+	mips.pc = val + 4; 
+	return;
+    }
+    else if(strcmp(o, "02") == 0){
+	//j
+	printf("pc = %8.8x\n", val);
+	mips.pc = val; 
+	return;
+    }
+    else if(strcmp(o, "03") == 0){
+	//jal
+	printf("pc = %8.8x\n", val);
+	mips.pc = val;
+	return;
+    }
+    else if(strcmp(o, "00") == 0 && strcmp(f, "08") == 0){
+	//jr
+	printf("pc = %8.8x\n", val);
+	mips.pc = val + 4; 
+	return;
+    }
+    else{
+	mips.pc+=4;
+	return;
+    }
+    
+   
 }
 
 /*
