@@ -19,10 +19,39 @@ void PrintInstruction (DecodedInstr*);
 unsigned createMask(unsigned a, unsigned b);
 //macro provided at: https://stackoverflow.com/questions/523724/c-c-check-if-one-bit-is-set-in-i-e-int-variable
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+#define false 0
+#define true 1
+typedef int bool;
 
 int32_t signExtension(int32_t instr) {
     int16_t value = (int16_t)instr;
     return (int32_t)value;
+}
+signed complement(int immed){
+ 	//Performing ~ operator will not give us the correct value
+	//Perform XOR operation to give us the "correct complement"
+	 signed value = immed ^ 0xffff;
+	//If the complement is "0"it is -1
+	if(value == 0){
+	   value = ~value;
+	}
+	//If not, then take 2's complement
+	else
+	{
+	   value = ~value + 1 ;
+	}
+	return value;	 
+}
+bool checkSigned(int immed){
+        unsigned first_bit = immed & (1 << (15));
+	first_bit = first_bit >> 15; 
+	//Checking if the value is signed
+	if(first_bit == 1){
+	   return true;
+	}
+	else{
+	   return false; 
+	}
 }
 
 /*Globally accessible Computer variable*/
@@ -664,6 +693,13 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	d->regs.i.rt = rt;
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
+	//Checking if the value is signed
+	if(checkSigned(d->regs.i.addr_or_immed)){
+	 	 
+	   signed value = complement(d->regs.i.addr_or_immed);
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
         //Testing if decoded properly
 	printf("%u %u %x\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("addiu\n");
@@ -702,6 +738,13 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	d->regs.i.rt = rt;
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
+	//Checking if the value is signed
+	if(checkSigned(d->regs.i.addr_or_immed)){
+	 	 
+	   signed value = complement(d->regs.i.addr_or_immed);
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("andi\n");
@@ -838,6 +881,13 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	d->regs.i.rt = rt;
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
+	//Checking if the value is signed
+	if(checkSigned(d->regs.i.addr_or_immed)){
+	 	 
+	   signed value = complement(d->regs.i.addr_or_immed);
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("lui\n");
@@ -916,6 +966,13 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	d->regs.i.rt = rt;
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
+	//Checking if the value is signed
+	if(checkSigned(d->regs.i.addr_or_immed)){
+	 	 
+	   signed value = complement(d->regs.i.addr_or_immed);
+	   //Update the immed value
+	   d->regs.i.addr_or_immed = value;
+	}
         //Testing if decoded properly
 	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
  	printf("ori\n");
@@ -1030,7 +1087,8 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.j.target;
 	//jal jumps to another registes and saves the return dress, $31
-	mips.registers[31] = mips.pc; 
+	//This needs to be done in writeback, keep the purposes of the functions separated
+	//mips.registers[31] = mips.pc; 
 
 	printf("RegsVals: rd: %8.8x\n", rVals->R_rd);
 
@@ -1094,213 +1152,47 @@ void PrintInstruction ( DecodedInstr* d) {
     }
     else if(d->type == I){
       if(strcmp(o, "09") == 0){
-	//Extracting first bit to from left most side
-	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
-	first_bit = first_bit >> 15; 
-	//Checking if the value is signed
-	if(first_bit == 1){
-	 	 
-	   //Performing ~ operator will not give us the correct value
-	   //Perform XOR operation to give us the "correct complement"
-	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
-	   //If the complement is "0"it is -1
-	   if(value == 0){
-		value = ~value;
-	   }
-	   //If not, then take 2's complement
-	   else
-	   {
-		value = ~value + 1 ;
-	   }
-	   //Update the immed value
-	   d->regs.i.addr_or_immed = value;
-	}
+	
 	printf("addiu $%u, $%u, $%i\n", d->regs.i.rt, d->regs.i.rs, d->regs.i.addr_or_immed);
 	return;
       }
       if(strcmp(o, "0c") == 0){
-	//Extracting first bit to from left most side
-	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
-	first_bit = first_bit >> 15; 
-	//Checking if the value is signed
-	if(first_bit == 1){
-	 	 
-	   //Performing ~ operator will not give us the correct value
-	   //Perform XOR operation to give us the "correct complement"
-	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
-	   //If the complement is "0"it is -1
-	   if(value == 0){
-		value = ~value;
-	   }
-	   //If not, then take 2's complement
-	   else
-	   {
-		value = ~value + 1 ;
-	   }
-	   //Update the immed value
-	   d->regs.i.addr_or_immed = value;
-	}
+	
 	printf("andi $%u, $%u, $%i\n", d->regs.i.rt, d->regs.i.rs, d->regs.i.addr_or_immed);
 	return;
       }
       if(strcmp(o, "04") == 0){
-	//Extracting first bit to from left most side
-	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
-	first_bit = first_bit >> 15; 
-	//Checking if the value is signed
-	if(first_bit == 1){
-	 	 
-	   //Performing ~ operator will not give us the correct value
-	   //Perform XOR operation to give us the "correct complement"
-	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
-           printf("true\n");
-	   //If the complement is "0"it is -1
-	   if(value == 0){
-		value = ~value;
-	   }
-	   //If not, then take 2's complement
-	   else
-	   {
-		value = ~value + 1 ;
-	   }
-	   //Update the immed value
-	   d->regs.i.addr_or_immed = value;
-	}
+	
 	printf("beq $%u, $%u, $0x%8.8x\n", d->regs.i.rs, d->regs.i.rt, 
 					d->regs.i.addr_or_immed);
 	return;
       }
       if(strcmp(o, "05") == 0){
-	//Extracting first bit to from left most side
-	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
-	first_bit = first_bit >> 15; 
-	//Checking if the value is signed
-	if(first_bit == 1){
-	 	 
-	   //Performing ~ operator will not give us the correct value
-	   //Perform XOR operation to give us the "correct complement"
-	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
-           printf("true\n");
-	   //If the complement is "0"it is -1
-	   if(value == 0){
-		value = ~value;
-	   }
-	   //If not, then take 2's complement
-	   else
-	   {
-		value = ~value + 1 ;
-	   }
-	   //Update the immed value
-	   d->regs.i.addr_or_immed = value;
-	}
+	
 	printf("bne $%u, $%u, $0x%8.8x\n", d->regs.i.rs, d->regs.i.rt, 
 					d->regs.i.addr_or_immed);
 	return;
       }
       if(strcmp(o, "0f") == 0){
-	//Extracting first bit to from left most side
-	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
-	first_bit = first_bit >> 15; 
-	//Checking if the value is signed
-	if(first_bit == 1){
-	 	 
-	   //Performing ~ operator will not give us the correct value
-	   //Perform XOR operation to give us the "correct complement"
-	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
-           printf("true\n");
-	   //If the complement is "0"it is -1
-	   if(value == 0){
-		value = ~value;
-	   }
-	   //If not, then take 2's complement
-	   else
-	   {
-		value = ~value + 1 ;
-	   }
-	   //Update the immed value
-	   d->regs.i.addr_or_immed = value;
-	}
+	
 	printf("lui $%u, $%u, $0x%8.8x\n", d->regs.i.rt, d->regs.i.rs, 
 					d->regs.i.addr_or_immed);
 	return;
       }
       if(strcmp(o, "23") == 0){
-	//Extracting first bit to from left most side
-	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
-	first_bit = first_bit >> 15; 
-	//Checking if the value is signed
-	if(first_bit == 1){
-	 	 
-	   //Performing ~ operator will not give us the correct value
-	   //Perform XOR operation to give us the "correct complement"
-	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
-           printf("true\n");
-	   //If the complement is "0"it is -1
-	   if(value == 0){
-		value = ~value;
-	   }
-	   //If not, then take 2's complement
-	   else
-	   {
-		value = ~value + 1 ;
-	   }
-	   //Update the immed value
-	   d->regs.i.addr_or_immed = value;
-	}
+	
 	printf("lw $%u, $%u, $0x%8.8x\n", d->regs.i.rt, d->regs.i.rs, 
 					d->regs.i.addr_or_immed);
 	return;
       }
       if(strcmp(o, "0d") == 0){
-	//Extracting first bit to from left most side
-	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
-	first_bit = first_bit >> 15; 
-	//Checking if the value is signed
-	if(first_bit == 1){
-	 	 
-	   //Performing ~ operator will not give us the correct value
-	   //Perform XOR operation to give us the "correct complement"
-	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
-           printf("true\n");
-	   //If the complement is "0"it is -1
-	   if(value == 0){
-		value = ~value;
-	   }
-	   //If not, then take 2's complement
-	   else
-	   {
-		value = ~value + 1 ;
-	   }
-	   //Update the immed value
-	   d->regs.i.addr_or_immed = value;
-	}
+	
 	printf("ori $%u, $%u, $0x%8.8x\n", d->regs.i.rt, d->regs.i.rs, 
 					d->regs.i.addr_or_immed);
 	return;
       }
       if(strcmp(o, "2b") == 0){
-	//Extracting first bit to from left most side
-	unsigned first_bit = d->regs.i.addr_or_immed & (1 << (15));
-	first_bit = first_bit >> 15; 
-	//Checking if the value is signed
-	if(first_bit == 1){
-	 	 
-	   //Performing ~ operator will not give us the correct value
-	   //Perform XOR operation to give us the "correct complement"
-	   signed value = d->regs.i.addr_or_immed ^ 0xffff;
-           printf("true\n");
-	   //If the complement is "0"it is -1
-	   if(value == 0){
-		value = ~value;
-	   }
-	   //If not, then take 2's complement
-	   else
-	   {
-		value = ~value + 1 ;
-	   }
-	   //Update the immed value
-	   d->regs.i.addr_or_immed = value;
-	}
+	
 	printf("sw $%u, $%u, $0x%8.8x\n", d->regs.i.rt, d->regs.i.rs, 
 					d->regs.i.addr_or_immed);
 	return;
@@ -1344,46 +1236,141 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	
 	//Return the computed value
 	//mips.registers[changedReg] = rVals->R_rs + rVals->R_rt; 
+	int a = 0;
+	int b = 0;
+	a = rVals->R_rs;
+	b = rVals->R_rt;
 	
-	return rVals->R_rs + rVals->R_rt; 
+	
+	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	
+	return mips.registers[a] + mips.registers[b]; 
       }
       if(strcmp(f, "24") == 0){
 	
-	//return the computed value
 	
-	return rVals->R_rs & rVals->R_rt; 
+	//Return the computed value
+	int a = 0;
+	int b = 0;
+	a = rVals->R_rs;
+	b = rVals->R_rt;
+	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	return mips.registers[a] & mips.registers[b]; 
       }
       if(strcmp(f, "08") == 0){
 	/*Not sure if this needs to be updated, but the pc will get updated to whatever 
 	  source*/
 	/*No, doesn't need to be updated*, just need to return the value stored in 
 	  the register at R_rs*/
-	return mips.registers[rVals->R_rs];  
+	//The Value returned is the source or address
+	int a = 0;
+	
+	a = rVals->R_rs;
+	
+	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	return mips.registers[a];  
       }
       if(strcmp(f, "25") == 0){
-	
+	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	return rVals->R_rs | rVals->R_rt;  
       }
       if(strcmp(f, "29") == 0){
-	
-	return (rVals->R_rs < rVals->R_rt ? 1 : 0); 
+	int a = 0;
+	int b = 0;
+	a = rVals->R_rs;
+	b = rVals->R_rt;
+	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	return (mips.registers[a] < mips.registers[b] ? 1 : 0); 
       }
       if(strcmp(f, "00") == 0){
-	
-	return rVals->R_rs << rVals->R_rt; 
+	int a = 0;
+	int b = 0;
+	a = rVals->R_rs;
+	b = rVals->R_rt;
+	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	return mips.registers[a] << mips.registers[b]; 
       }
       if(strcmp(f, "02") == 0){
-	
-	return rVals->R_rs >> rVals->R_rt;
+	int a = 0;
+	int b = 0;
+	a = rVals->R_rs;
+	b = rVals->R_rt;
+	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	return mips.registers[a] >> mips.registers[b];
       }	
       if(strcmp(f, "23") == 0){
-	
-	return rVals->R_rs - rVals->R_rt;
+	int a = 0;
+	int b = 0;
+	a = rVals->R_rs;
+	b = rVals->R_rt;
+	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	return mips.registers[a] - mips.registers[b];
       }		
      
     }
     else if(d->type == I){
-      return 0;
+       if(strcmp(o, "09") == 0){
+	 int a = 0;
+	 int imm = 0;
+	 a = rVals->R_rs;
+	 imm = rVals->R_rt;
+	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 return mips.registers[a] +imm; 
+	}
+	if(strcmp(o, "0c") == 0){
+	 int a = 0;
+	 int imm = 0;
+	 a = rVals->R_rs;
+	 imm = rVals->R_rt;
+	 printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
+	 return mips.registers[a] & imm; 
+	}
+	if(strcmp(o, "04") == 0){
+	 int a = 0;
+	 int b = 0;
+	 a = rVals->R_rd;
+	 b = rVals->R_rs;
+	 printf("Rd:%i, Rs:%i\n", rVals->R_rd, rVals->R_rs);
+	 return ((mips.registers[a] - mips.registers[b]) == 0 ? rVals->R_rt : mips.pc + 4); 
+	}
+	if(strcmp(o, "05") == 0){
+	 int a = 0;
+	 int b = 0;
+	 a = rVals->R_rd;
+	 b = rVals->R_rs;
+	 printf("Rd:%i, Rs:%i\n", rVals->R_rd, rVals->R_rs);
+	 return ((mips.registers[a] - mips.registers[b]) != 0 ? rVals->R_rt : mips.pc + 4); 
+	}
+	if(strcmp(o, "0f") == 0){
+	
+	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 return rVals->R_rt << 16; 
+	}
+	if(strcmp(o, "23") == 0){
+	 int a = 0;
+	 int b = 0;
+	 a = rVals->R_rs;
+	 b = rVals->R_rt;
+	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 return mips.registers[a] + b; 
+	}
+	if(strcmp(o, "0d") == 0){
+	 int a = 0;
+	 int b = 0;
+	 a = rVals->R_rs;
+	 b = rVals->R_rt;
+	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 return mips.registers[a] | b;
+	}
+	if(strcmp(o, "2b") == 0){
+	 int a = 0;
+	 int b = 0;
+	 a = rVals->R_rs;
+	 b = rVals->R_rt;
+	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 return mips.registers[a] + b; 
+	}
+
     }
     else if(d->type == J){
       return 0;
