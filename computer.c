@@ -30,7 +30,7 @@ int32_t signExtension(int32_t instr) {
 signed complement(int immed){
  	//Performing ~ operator will not give us the correct value
 	//Perform XOR operation to give us the "correct complement"
-	 signed value = immed ^ 0xffff;
+	 signed value = immed ^ 0xffffffff;
 	//If the complement is "0"it is -1
 	if(value == 0){
 	   value = ~value;
@@ -43,8 +43,8 @@ signed complement(int immed){
 	return value;	 
 }
 bool checkSigned(int immed){
-        unsigned first_bit = immed & (1 << (15));
-	first_bit = first_bit >> 15; 
+        unsigned first_bit = immed & (1 << (31));
+	first_bit = first_bit >> 31; 
 	//Checking if the value is signed
 	if(first_bit == 1){
 	   return true;
@@ -126,9 +126,9 @@ void Simulate () {
         /* Fetch instr at mips.pc, returning it in instr */
         instr = Fetch (mips.pc);
 
-	/*if(instr == 0x00000000){
+	if(instr == 0x00000000){
 	   exit(0);
-	}*/
+	}
         printf ("Executing instruction at %8.8x: %8.8x\n", mips.pc, instr);
 
         /* 
@@ -686,6 +686,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	first_bit = first_bit & addr_or_immed;  
 	printf("The first bit: %x\n", first_bit);*/ 
         addr_or_immed = addr_or_immed & instr; 
+	
+	//Sign extend to preserve value
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	addr_or_immed = value;
+	
         printf("Addr or Immed:%x\n", (addr_or_immed)); 
         //Setting rs register
 	d->regs.i.rs = rs; 
@@ -731,6 +736,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
+
+	//Sign extend to preserve value
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	addr_or_immed = value;
+
         printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
@@ -778,10 +788,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Extracting immediate or address from instruction
 	signed addr_or_immed = createMask(0,15);
         addr_or_immed = addr_or_immed & instr; 
-
-	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	
 	//Sign extend to preserve value
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
 	addr_or_immed = value;
+	
 	//Multiply branch target by 4
 	addr_or_immed = addr_or_immed << 2;
 	//Add value to PC+4;
@@ -874,6 +885,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
+	
+	//Sign extend to preserve value
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	addr_or_immed = value;
+
         printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
@@ -920,6 +936,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
+	
+	//Sign extend to preserve value
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	
+	addr_or_immed = value;
         printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
@@ -959,6 +980,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
+
+	//Sign extend to preserve value
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	addr_or_immed = value;
+	
         printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
@@ -1007,6 +1033,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
+
+	//Sign extend to preserve value
+	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
+	
+	addr_or_immed = value;
         printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
@@ -1214,7 +1245,7 @@ void PrintInstruction ( DecodedInstr* d) {
     }
     else{
 	//There's an unsupported instruction, so terminate as stated in the example
-	//exit(0);
+	exit(0);
 	return;
     }
     
@@ -1312,15 +1343,15 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
        if(strcmp(o, "09") == 0){
 	 int a = 0;
 	 int imm = 0;
-	 a = rVals->R_rs;
+	 a = rVals->R_rd;
 	 imm = rVals->R_rt;
-	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
-	 return mips.registers[a] +imm; 
+	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt); 
+	 return mips.registers[a] +imm;
 	}
 	if(strcmp(o, "0c") == 0){
 	 int a = 0;
 	 int imm = 0;
-	 a = rVals->R_rs;
+	 a = rVals->R_rd;
 	 imm = rVals->R_rt;
 	 printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
 	 return mips.registers[a] & imm; 
@@ -1330,16 +1361,33 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 int b = 0;
 	 a = rVals->R_rd;
 	 b = rVals->R_rs;
-	 printf("Rd:%i, Rs:%i\n", rVals->R_rd, rVals->R_rs);
-	 return ((mips.registers[a] - mips.registers[b]) == 0 ? rVals->R_rt : mips.pc); 
+	 if((mips.registers[a] - mips.registers[b] == 0))
+	 {
+		 printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+		return rVals->R_rt;
+	 }
+	 else{
+		 printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, mips.pc);
+		return (mips.pc + 4);
+	 }
+	 
+	
+	
 	}
 	if(strcmp(o, "05") == 0){
 	 int a = 0;
 	 int b = 0;
 	 a = rVals->R_rd;
 	 b = rVals->R_rs;
-	 printf("Rd:%i, Rs:%i\n", rVals->R_rd, rVals->R_rs);
-	 return ((mips.registers[a] - mips.registers[b]) != 0 ? rVals->R_rt : mips.pc); 
+	 if((mips.registers[a] - mips.registers[b] == 0))
+	 {
+		 printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+		return rVals->R_rt;
+	 }
+	 else{
+		 printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, mips.pc);
+		return mips.pc;
+	 }
 	}
 	if(strcmp(o, "0f") == 0){
 	
@@ -1349,7 +1397,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	if(strcmp(o, "23") == 0){
 	 int a = 0;
 	 int b = 0;
-	 a = rVals->R_rs;
+	 a = rVals->R_rd;
 	 b = rVals->R_rt;
 	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
 	 return mips.registers[a] + b; 
@@ -1404,7 +1452,7 @@ void UpdatePC ( DecodedInstr* d, int val) {
     if(strcmp(o, "04") == 0){
 	//beq
 	printf("pc = %8.8x\n", val);
-	mips.pc = val + 4; 
+	mips.pc = val; 
 	return;
     }
     else if(strcmp(o, "05") == 0){
@@ -1451,7 +1499,9 @@ void UpdatePC ( DecodedInstr* d, int val) {
  */
 int Mem( DecodedInstr* d, int val, int *changedMem) {
     /* Your code goes here */
-  return 0;
+ 
+  //if no mem, just return the val
+  return val;
 }
 
 /* 
@@ -1462,4 +1512,94 @@ int Mem( DecodedInstr* d, int val, int *changedMem) {
  */
 void RegWrite( DecodedInstr* d, int val, int *changedReg) {
     /* Your code goes here */
+   //Checks if the format is R
+   if(d->type == R){
+	//If so, we know the opcode is, thus we just need to check the value of funct
+	if(d->regs.r.funct == 0x21){
+		//addu
+		*changedReg = d->regs.r.rd;
+		mips.registers[*changedReg] = val;
+		return;
+	}
+	if(d->regs.r.funct == 0x24){
+		//and
+		*changedReg = d->regs.r.rd;
+		mips.registers[*changedReg] = val;
+		return;
+	}
+	if(d->regs.r.funct == 0x25){
+		//or
+		*changedReg = d->regs.r.rd;
+		mips.registers[*changedReg] = val;
+		return;
+	}
+	if(d->regs.r.funct == 0x2a){
+		//slt
+		*changedReg = d->regs.r.rd;
+		mips.registers[*changedReg] = val;
+		return;
+	}
+	if(d->regs.r.funct == 0x00){
+		//sll
+		*changedReg = d->regs.r.rd;
+		mips.registers[*changedReg] = val;
+		return;
+	}
+	if(d->regs.r.funct == 0x02){
+		//srl
+		*changedReg = d->regs.r.rd;
+		mips.registers[*changedReg] = val;
+		return;
+	}
+	if(d->regs.r.funct == 0x23){
+		//subu
+		*changedReg = d->regs.r.rd;
+		mips.registers[*changedReg] = val;
+		return;
+	}
+	
+	//jr was executed, and doesn't update any registers
+	*changedReg = -1;
+	return;
+	
+   }
+   //Checking if the format is I-format
+   if(d->type == I){
+	//If so, we just need to check the opcode
+	//Not all I-format instructions writeback to a register
+	if(d->op == 0x09){
+		*changedReg = d->regs.i.rt;
+		printf("val: %i\n", val);
+		mips.registers[*changedReg] = val;
+		return; 
+	}
+	if(d->op == 0x0c){
+		*changedReg = d->regs.i.rs;
+		mips.registers[*changedReg] = val;
+		return; 
+	}
+	if(d->op == 0x0f){
+		*changedReg = d->regs.i.rs;
+		mips.registers[*changedReg] = val;
+		return; 
+	}
+	if(d->op == 0x23){
+		*changedReg = d->regs.i.rs;
+		mips.registers[*changedReg] = val;
+		return; 
+	}
+	if(d->op == 0x0d){
+		*changedReg = d->regs.i.rs;
+		mips.registers[*changedReg] = val;
+		return; 
+	}
+	//executed beq, bne, or any other I-format instruction that requires a writeback
+	*changedReg = -1;
+	return;
+   }
+   if(d->type == J){
+	//If there is a jump, no register is changed
+	*changedReg = -1;
+	return;
+   }
 }
