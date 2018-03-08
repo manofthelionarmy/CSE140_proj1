@@ -1499,8 +1499,27 @@ void UpdatePC ( DecodedInstr* d, int val) {
  */
 int Mem( DecodedInstr* d, int val, int *changedMem) {
     /* Your code goes here */
+  //lw
+  if(d->op == 0x23){
+	//just need to return the value from memory. 
+	//val is the calculated index
+	//lw doesn't update any values in memory, therefore changedMem is not updated
+	return mips.memory[val];
+  }
+  //sw
+  if(d->op == 0x2b){
+	
+	//val is the calculated index
+	//sw updates values in memory, therefore changedMem is updated
+	//stores the value found in the specified mips register
+	//returns 0 because sw doesn't update any registers; it updates memory
+	*changedMem = val;
+	mips.memory[*changedMem] = mips.registers[d->regs.i.rt];
+	return 0; 
+  }
  
-  //if no mem, just return the val
+  //if no MEM cycle is needed, just return the val
+  *changedMem = -1;
   return val;
 }
 
@@ -1574,26 +1593,31 @@ void RegWrite( DecodedInstr* d, int val, int *changedReg) {
 		return; 
 	}
 	if(d->op == 0x0c){
-		*changedReg = d->regs.i.rs;
+		*changedReg = d->regs.i.rt;
 		mips.registers[*changedReg] = val;
 		return; 
 	}
 	if(d->op == 0x0f){
-		*changedReg = d->regs.i.rs;
+		*changedReg = d->regs.i.rt;
 		mips.registers[*changedReg] = val;
 		return; 
 	}
 	if(d->op == 0x23){
-		*changedReg = d->regs.i.rs;
+		*changedReg = d->regs.i.rt;
 		mips.registers[*changedReg] = val;
 		return; 
 	}
 	if(d->op == 0x0d){
-		*changedReg = d->regs.i.rs;
+		*changedReg = d->regs.i.rt;
 		mips.registers[*changedReg] = val;
 		return; 
 	}
-	//executed beq, bne, or any other I-format instruction that requires a writeback
+	if(d->op == 0x23){
+		*changedReg = d->regs.i.rt;
+		mips.registers[*changedReg] = val;
+		return;
+	}
+	//executed beq, bne, or sw
 	*changedReg = -1;
 	return;
    }
