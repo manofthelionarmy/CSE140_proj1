@@ -81,7 +81,7 @@ void InitComputer (FILE* filein, int printingRegisters, int printingMemory,
     for (k=0; k<MAXNUMINSTRS+MAXNUMDATA; k++) {
         mips.memory[k] = 0;
     }
-
+    
     k = 0;
     while (fread(&instr, 4, 1, filein)) {
 	/*swap to big endian, convert to host byte order. Ignore this.*/
@@ -126,9 +126,9 @@ void Simulate () {
         /* Fetch instr at mips.pc, returning it in instr */
         instr = Fetch (mips.pc);
 
-	if(instr == 0x00000000){
+	/*if(instr == 0x00000000){
 	   exit(0);
-	}
+	}*/
         printf ("Executing instruction at %8.8x: %8.8x\n", mips.pc, instr);
 
         /* 
@@ -1513,8 +1513,11 @@ int Mem( DecodedInstr* d, int val, int *changedMem) {
 	//sw updates values in memory, therefore changedMem is updated
 	//stores the value found in the specified mips register
 	//returns 0 because sw doesn't update any registers; it updates memory
-	*changedMem = val;
-	mips.memory[*changedMem] = mips.registers[d->regs.i.rt];
+	//Just need to increment the location of mips.memory with val
+
+	changedMem = mips.memory + val;
+	printf("Memory location of mips.memory: %8.8x, Memory location of changedMem: %8.8x\n", *mips.memory, *changedMem);
+	mips.memory[val] = mips.registers[d->regs.i.rt];
 	return 0; 
   }
  
