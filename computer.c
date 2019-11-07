@@ -251,8 +251,8 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
     //store the calculated values into char* 
     sprintf(o, "%2.2x", result);
     sprintf(f, "%2.2x", funct);
-    printf("The instruction opcode value is %s\n", o);
-    printf("The funct/immediate value is %s\n", f);
+    //printf("The instruction opcode value is %s\n", o);
+    //printf("The funct/immediate value is %s\n", f);*/
 
     /*
      Using Mips Green Sheet for opcode and funct
@@ -269,17 +269,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned rd = createMask(11,15); 
         rd = rd & instr; 
 	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
+        //printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
 	shamt = shamt >> 6; 
@@ -296,8 +296,8 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting funct register
 	d->regs.r.funct = funct; 
         //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+	/*printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);*/
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.r.rd;
@@ -305,9 +305,9 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	rVals->R_rt = d->regs.r.rt; 
 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
-        printf("addu\n");
+        //printf("addu\n");
         return; 
     }
     else if(strcmp(o, "00") == 0 && strcmp(f, "24") == 0){
@@ -319,17 +319,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned rd = createMask(11,15); 
         rd = rd & instr; 
 	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
+        //printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
 	shamt = shamt >> 6; 
@@ -346,18 +346,18 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting funct register
 	d->regs.r.funct = funct; 
         //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+	/*printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);*/
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.r.rd;
 	rVals->R_rs = d->regs.r.rs; 
 	rVals->R_rt = d->regs.r.rt;
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
-        printf("and\n");
+        //printf("and\n");
         return; 
     }
     else if(strcmp(o, "00") == 0 && strcmp(f, "08") == 0){
@@ -369,17 +369,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned rd = createMask(11,15); 
         rd = rd & instr; 
 	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
+        //printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
 	shamt = shamt >> 6; 
@@ -396,18 +396,18 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting funct register
 	d->regs.r.funct = funct; 
         //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+	/*printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);*/
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.r.rd;
 	rVals->R_rs = d->regs.r.rs; 
 	rVals->R_rt = d->regs.r.rt;
 
-	printf("RegsVals: rd: %u rs:%8.8x rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%8.8x rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
-        printf("jr\n");
+        //printf("jr\n");
         return;
     }
     else if(strcmp(o, "00") == 0 && strcmp(f, "25")==0){
@@ -419,17 +419,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned rd = createMask(11,15); 
         rd = rd & instr; 
 	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
+        //printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
 	shamt = shamt >> 6; 
@@ -446,17 +446,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting funct register
 	d->regs.r.funct = funct; 
         //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+	/*printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);*/
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.r.rd;
 	rVals->R_rs = d->regs.r.rs; 
 	rVals->R_rt = d->regs.r.rt; 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
-        printf("or\n");
+        //printf("or\n");
         return;
     }
     else if(strcmp(o, "00") == 0 && strcmp(f, "2a")==0){
@@ -468,17 +468,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned rd = createMask(11,15); 
         rd = rd & instr; 
 	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
+        //printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
 	shamt = shamt >> 6; 
@@ -495,16 +495,16 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting funct register
 	d->regs.r.funct = funct; 
         //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
-        printf("slt\n");
+	/*printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);*/
+        //printf("slt\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.r.rd;
 	rVals->R_rs = d->regs.r.rs; 
 	rVals->R_rt = d->regs.r.rt; 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
         return;
@@ -518,17 +518,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned rd = createMask(11,15); 
         rd = rd & instr; 
 	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
+        //printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
 	shamt = shamt >> 6; 
@@ -545,16 +545,16 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting funct register
 	d->regs.r.funct = funct; 
         //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
-        printf("sll\n");
+	/*printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);*/
+        //printf("sll\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.r.rd;
 	rVals->R_rs = d->regs.r.rs; 
 	rVals->R_rt = d->regs.r.rt; 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
         return;
@@ -568,17 +568,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned rd = createMask(11,15); 
         rd = rd & instr; 
 	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
+        //printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
 	shamt = shamt >> 6; 
@@ -595,16 +595,16 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting funct register
 	d->regs.r.funct = funct; 
         //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
-        printf("srl\n");
+	/*printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);*/
+        //printf("srl\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.r.rd;
 	rVals->R_rs = d->regs.r.rs; 
 	rVals->R_rt = d->regs.r.rt; 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
  
 
         return;
@@ -618,17 +618,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned rd = createMask(11,15); 
         rd = rd & instr; 
 	rd = rd >> 11; 
-        printf("Rd:%u\n", rd); 
+        //printf("Rd:%u\n", rd); 
 	unsigned shamt = createMask(6, 10); 
 	shamt = shamt & instr; 
 	shamt = shamt >> 6; 
@@ -645,17 +645,17 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting funct register
 	d->regs.r.funct = funct; 
         //Testing if decoded properly
-	printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
-				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);
+	/*printf("%u %u %u %u %u\n", d->regs.r.rs, d->regs.r.rt, 
+				d->regs.r.rd, d->regs.r.shamt, d->regs.r.funct);*/
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.r.rd;
 	rVals->R_rs = d->regs.r.rs; 
 	rVals->R_rt = d->regs.r.rt; 
 
-        printf("subu\n");
+        //printf("subu\n");
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
         return;
@@ -674,12 +674,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15);
 	/*unsigned first_bit = createMask(15,15);
@@ -691,7 +691,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
 	addr_or_immed = value;
 	
-        printf("Addr or Immed:%x\n", (addr_or_immed)); 
+        //printf("Addr or Immed:%x\n", (addr_or_immed)); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -706,15 +706,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	   d->regs.i.addr_or_immed = value;
 	}
         //Testing if decoded properly
-	printf("%u %u %x\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("addiu\n");
+	//printf("%u %u %x\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+ 	//printf("addiu\n");
 	
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.i.rt;
 	rVals->R_rs = d->regs.i.rs; 
 	rVals->R_rt = d->regs.i.addr_or_immed; 
 	
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
         return;
     }
@@ -727,12 +727,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
@@ -741,7 +741,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
 	addr_or_immed = value;
 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
+        //printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -756,15 +756,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	   d->regs.i.addr_or_immed = value;
 	}
         //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("andi\n");
+	//printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+ 	//printf("andi\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.i.rt;
 	rVals->R_rs = d->regs.i.rs; 
 	rVals->R_rt = d->regs.i.addr_or_immed; 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
         return;
@@ -778,12 +778,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 
 	//Extracting immediate or address from instruction
 	signed addr_or_immed = createMask(0,15);
@@ -797,7 +797,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	addr_or_immed = addr_or_immed << 2;
 	//Add value to PC+4;
 	addr_or_immed = addr_or_immed + (mips.pc + 4);
-        printf("Addr or Immed:%u\n", addr_or_immed); 
+        //printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -805,15 +805,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
         //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("beq\n");
+	//printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+ 	//printf("beq\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.i.rs;
 	rVals->R_rs = d->regs.i.rt; 
 	rVals->R_rt = d->regs.i.addr_or_immed; 
 	
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
         return;
@@ -827,12 +827,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	signed addr_or_immed = createMask(0,15);
         addr_or_immed = addr_or_immed & instr; 
@@ -846,7 +846,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	addr_or_immed = addr_or_immed + (mips.pc + 4);
 
 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
+        //printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -854,15 +854,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
         //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("bne\n");
+	//printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+ 	//printf("bne\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.i.rs;
 	rVals->R_rs = d->regs.i.rt; 
 	rVals->R_rt = d->regs.i.addr_or_immed; 
 	
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
         return;
@@ -876,12 +876,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
@@ -890,7 +890,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
 	addr_or_immed = value;
 
-        printf("Addr or Immed:%u\n", addr_or_immed); 
+        //printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -905,15 +905,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	   d->regs.i.addr_or_immed = value;
 	}
         //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("lui\n");
+	//printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+ 	//printf("lui\n");
 	
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.i.rt;
 	rVals->R_rs = d->regs.i.rs; 
 	rVals->R_rt = d->regs.i.addr_or_immed; 	
 	
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
 	return;
@@ -927,12 +927,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
@@ -941,7 +941,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
 	
 	addr_or_immed = value;
-        printf("Addr or Immed:%u\n", addr_or_immed); 
+        //printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -949,15 +949,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
         //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("lw\n");
+	//printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+ 	//printf("lw\n");
 	
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.i.rt;
 	rVals->R_rs = d->regs.i.rs; 
 	rVals->R_rt = d->regs.i.addr_or_immed; 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 
         return;
@@ -971,12 +971,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
@@ -985,7 +985,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
 	addr_or_immed = value;
 	
-        printf("Addr or Immed:%u\n", addr_or_immed); 
+        //printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -1000,15 +1000,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	   d->regs.i.addr_or_immed = value;
 	}
         //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("ori\n");
+	//printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+ 	//printf("ori\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.i.rt;
 	rVals->R_rs = d->regs.i.rs; 
 	rVals->R_rt = d->regs.i.addr_or_immed; 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
 	
 	
@@ -1024,12 +1024,12 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         unsigned rs = createMask(21, 25); 
 	rs = rs & instr; 
         rs = rs >> 21; 
-        printf("Rs:%u\n", rs);
+        //printf("Rs:%u\n", rs);
 	//Extracting rt from instruction
 	unsigned rt = createMask(16, 20); 
         rt = rt & instr; 
         rt = rt >> 16; 
-        printf("Rt:%u\n", rt); 
+        //printf("Rt:%u\n", rt); 
 	//Extracting immediate or address from instruction
 	unsigned addr_or_immed = createMask(0,15); 
         addr_or_immed = addr_or_immed & instr; 
@@ -1038,7 +1038,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	int32_t value = signExtension((int32_t)(int16_t)addr_or_immed);
 	
 	addr_or_immed = value;
-        printf("Addr or Immed:%u\n", addr_or_immed); 
+        //printf("Addr or Immed:%u\n", addr_or_immed); 
         //Setting rs register
 	d->regs.i.rs = rs; 
 	//Setting rt register
@@ -1046,15 +1046,15 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//Setting immediate value
 	d->regs.i.addr_or_immed = addr_or_immed;
         //Testing if decoded properly
-	printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
- 	printf("sw\n");
+	//printf("%u %u %u\n", d->regs.i.rs, d->regs.i.rt, d->regs.i.addr_or_immed);
+ 	//printf("sw\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.i.rt;
 	rVals->R_rs = d->regs.i.rs; 
 	rVals->R_rt = d->regs.i.addr_or_immed; 
 
-	printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+	//printf("RegsVals: rd: %u rs:%u rt:%x\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 
         return;
     }
@@ -1083,13 +1083,13 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
         printf("Address: %8.8x\n", address);
 	//Setting target
 	d->regs.j.target = address; 
-	printf("%u %8.8x\n", d->op, d->regs.j.target);
-        printf("j\n"); 
+	//printf("%u %8.8x\n", d->op, d->regs.j.target);
+        //printf("j\n"); 
 	
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.j.target;
 
-	printf("RegsVals: rd: %8.8x\n", rVals->R_rd);
+	//printf("RegsVals: rd: %8.8x\n", rVals->R_rd);
 
         return;
     }
@@ -1109,11 +1109,11 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	first_four_bits = first_four_bits & mips.pc; 
 	//Concatenating the bits
 	address = address | first_four_bits;
-        printf("Address: %8.8x\n", address);
+        //printf("Address: %8.8x\n", address);
 	//Setting target
 	d->regs.j.target = address; 
-	printf("%u %8.8x\n", d->op, d->regs.j.target);
-        printf("jal\n");
+	//printf("%u %8.8x\n", d->op, d->regs.j.target);
+        //printf("jal\n");
 
 	//Need to get rVals updated
 	rVals->R_rd = d->regs.j.target;
@@ -1121,7 +1121,7 @@ void Decode ( unsigned int instr, DecodedInstr* d, RegVals* rVals) {
 	//This needs to be done in writeback, keep the purposes of the functions separated
 	//mips.registers[31] = mips.pc; 
 
-	printf("RegsVals: rd: %8.8x\n", rVals->R_rd);
+	//printf("RegsVals: rd: %8.8x\n", rVals->R_rd);
 
         return;
     }
@@ -1273,7 +1273,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	b = rVals->R_rt;
 	
 	
-	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	////printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	
 	return mips.registers[a] + mips.registers[b]; 
       }
@@ -1285,7 +1285,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	int b = 0;
 	a = rVals->R_rs;
 	b = rVals->R_rt;
-	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	////printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	return mips.registers[a] & mips.registers[b]; 
       }
       if(strcmp(f, "08") == 0){
@@ -1298,11 +1298,11 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	
 	a = rVals->R_rs;
 	
-	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	////printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	return mips.registers[a];  
       }
       if(strcmp(f, "25") == 0){
-	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	//printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	return rVals->R_rs | rVals->R_rt;  
       }
       if(strcmp(f, "29") == 0){
@@ -1310,7 +1310,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	int b = 0;
 	a = rVals->R_rs;
 	b = rVals->R_rt;
-	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	//printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	return (mips.registers[a] < mips.registers[b] ? 1 : 0); 
       }
       if(strcmp(f, "00") == 0){
@@ -1318,7 +1318,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	int b = 0;
 	a = rVals->R_rs;
 	b = rVals->R_rt;
-	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	//printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	return mips.registers[a] << mips.registers[b]; 
       }
       if(strcmp(f, "02") == 0){
@@ -1326,7 +1326,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	int b = 0;
 	a = rVals->R_rs;
 	b = rVals->R_rt;
-	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	//printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	return mips.registers[a] >> mips.registers[b];
       }	
       if(strcmp(f, "23") == 0){
@@ -1334,7 +1334,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	int b = 0;
 	a = rVals->R_rs;
 	b = rVals->R_rt;
-	printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
+	//printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
 	return mips.registers[a] - mips.registers[b];
       }		
      
@@ -1345,7 +1345,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 int imm = 0;
 	 a = rVals->R_rd;
 	 imm = rVals->R_rt;
-	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt); 
+	 //printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt); 
 	 return mips.registers[a] +imm;
 	}
 	if(strcmp(o, "0c") == 0){
@@ -1353,7 +1353,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 int imm = 0;
 	 a = rVals->R_rd;
 	 imm = rVals->R_rt;
-	 printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
+	 //printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
 	 return mips.registers[a] & imm; 
 	}
 	if(strcmp(o, "04") == 0){
@@ -1363,11 +1363,11 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 b = rVals->R_rs;
 	 if((mips.registers[a] - mips.registers[b] == 0))
 	 {
-		 printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+		 //printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 		return rVals->R_rt;
 	 }
 	 else{
-		 printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, mips.pc);
+		// printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, mips.pc);
 		return (mips.pc + 4);
 	 }
 	 
@@ -1381,17 +1381,17 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 b = rVals->R_rs;
 	 if((mips.registers[a] - mips.registers[b] == 0))
 	 {
-		 printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
+		 //printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 		return rVals->R_rt;
 	 }
 	 else{
-		 printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, mips.pc);
+		// printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, mips.pc);
 		return mips.pc;
 	 }
 	}
 	if(strcmp(o, "0f") == 0){
 	
-	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 //printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
 	 return rVals->R_rt << 16; 
 	}
 	if(strcmp(o, "23") == 0){
@@ -1399,7 +1399,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 int offset = 0;
 	 pointer = rVals->R_rd;
 	 offset = rVals->R_rt;
-	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 //printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
 	 return mips.registers[pointer] + offset; 
 	}
 	if(strcmp(o, "0d") == 0){
@@ -1407,7 +1407,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 int b = 0;
 	 a = rVals->R_rs;
 	 b = rVals->R_rt;
-	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 //printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
 	 return mips.registers[a] | b;
 	}
 	if(strcmp(o, "2b") == 0){
@@ -1416,7 +1416,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 //pointer stores an address 
 	 pointer = rVals->R_rs;
 	 offset = rVals->R_rt;
-	 printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
+	 //printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
 	 return mips.registers[pointer] + offset; 
 	}
 
@@ -1424,14 +1424,14 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
     else if(d->type == J){
       if(strcmp(o, "02") == 0){
 	//return the target address
-	printf("%8.8x\n", rVals->R_rd);
+	//printf("%8.8x\n", rVals->R_rd);
 	return rVals->R_rd;
       }
       if(strcmp(o, "03") == 0){
 	//update return address
 	mips.registers[31] = mips.pc;
 	//return the target address
-	printf("%8.8x\n", rVals->R_rd);
+	//printf("%8.8x\n", rVals->R_rd);
 	return rVals->R_rd;
       }
     }
@@ -1452,7 +1452,7 @@ void UpdatePC ( DecodedInstr* d, int val) {
     sprintf(f, "%2.2x", d->regs.r.funct);
     if(strcmp(o, "04") == 0){
 	//beq
-	printf("pc = %8.8x\n", val);
+	//printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
 	mips.pc = val; 
 	return;
     }
@@ -1464,19 +1464,19 @@ void UpdatePC ( DecodedInstr* d, int val) {
     }
     else if(strcmp(o, "02") == 0){
 	//j
-	printf("pc = %8.8x\n", val);
+	//printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
 	mips.pc = val; 
 	return;
     }
     else if(strcmp(o, "03") == 0){
 	//jal
-	printf("pc = %8.8x\n", val);
+	//printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
 	mips.pc = val;
 	return;
     }
     else if(strcmp(o, "00") == 0 && strcmp(f, "08") == 0){
 	//jr
-	printf("pc = %8.8x\n", val);
+	//printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
 	mips.pc = val + 4; 
 	return;
     }
@@ -1520,9 +1520,9 @@ int Mem( DecodedInstr* d, int val, int *changedMem) {
 	//*changedMem = (val - 0x00401000)/4;
 	*changedMem = 0x00401000 + (4*val);
 	if(*changedMem >= 0x00401000 && *changedMem <= 0x00404000){
-		printf("Memory location of mips.memory: %8.8x, Memory location of changedMem: %8.8x\n", 0x00401000, *changedMem);
+		//printf("Memory location of mips.memory: %8.8x, Memory location of changedMem: %8.8x\n", 0x00401000, *changedMem);
 		int index = (*changedMem - 0x00401000)/4;
-		printf("val: %i\n", index);
+		//printf("val: %i\n", index);
 		mips.memory[index] = mips.registers[d->regs.i.rt];
 	}
 	else{
@@ -1602,7 +1602,7 @@ void RegWrite( DecodedInstr* d, int val, int *changedReg) {
 	//Not all I-format instructions writeback to a register
 	if(d->op == 0x09){
 		*changedReg = d->regs.i.rt;
-		printf("val: %i\n", val);
+		//printf("val: %i\n", val);
 		mips.registers[*changedReg] = val;
 		return; 
 	}
