@@ -146,7 +146,7 @@ void Simulate () {
 	 */
         val = Execute(&d, &rVals);
 
-	UpdatePC(&d,val);
+		UpdatePC(&d,val);
 
         /* 
 	 * Perform memory load or store. Place the
@@ -1299,7 +1299,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	a = rVals->R_rs;
 	
 	////printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
-	return mips.registers[a];  
+	return mips.registers[31];  
       }
       if(strcmp(f, "25") == 0){
 	//printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
@@ -1422,17 +1422,20 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 
     }
     else if(d->type == J){
-      if(strcmp(o, "02") == 0){
-	//return the target address
-	//printf("%8.8x\n", rVals->R_rd);
-	return rVals->R_rd;
+		// j
+      if(strcmp(o, "02") == 0  || d->op == 0x02){
+		//return the target address
+		//printf("%8.8x\n", rVals->R_rd);
+		return rVals->R_rd;
       }
-      if(strcmp(o, "03") == 0){
-	//update return address
-	mips.registers[31] = mips.pc;
-	//return the target address
-	//printf("%8.8x\n", rVals->R_rd);
-	return rVals->R_rd;
+	  //jal
+      if(d->op == 0x03 || strcmp(o, "03") == 0){
+		//update return address
+		mips.registers[31] = mips.pc;
+		printf("Register 31 during execute%8.8x\n", mips.registers[31]);
+		//return the target address
+		//printf("%8.8x\n", rVals->R_rd);
+		return rVals->R_rd;
       }
     }
   return 0;
@@ -1450,34 +1453,40 @@ void UpdatePC ( DecodedInstr* d, int val) {
     char f[6];
     sprintf(o, "%2.2x", d->op); 
     sprintf(f, "%2.2x", d->regs.r.funct);
-    if(strcmp(o, "04") == 0){
+
+	//printf("%s\n", o);
+    if(strcmp(o, "04") == 0 || d->op == 0x04){
 	//beq
 	//printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
 	mips.pc = val; 
 	return;
     }
-    else if(strcmp(o, "05") == 0){
+    else if(strcmp(o, "05") == 0 || d->op == 0x05){
 	//bne
-	printf("pc = %8.8x", val);
+	//printf("pc = %8.8x", val);
 	mips.pc = val + 4; 
 	return;
     }
-    else if(strcmp(o, "02") == 0){
+    else if(strcmp(o, "02") == 0 || d->op == 0x02){
 	//j
 	//printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
 	mips.pc = val; 
 	return;
     }
-    else if(strcmp(o, "03") == 0){
+    else if(strcmp(o, "03") == 0 || d->op == 0x03){
 	//jal
 	//printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
+	//printf("hello %d\n", val);
+	//mips.registers[31] = mips.pc;
 	mips.pc = val;
 	return;
     }
-    else if(strcmp(o, "00") == 0 && strcmp(f, "08") == 0){
+    else if(strcmp(o, "00") == 0 && strcmp(f, "08") == 0 || d->op == 0x00 && d->regs.r.funct == 0x08){
 	//jr
 	//printf("Rs:%i, Rt:%i", rVals->R_rs, rVals->R_rt);
-	mips.pc = val + 4; 
+	//printf("r31 is %8.8x\n", val); 
+	mips.pc = val; 
+
 	return;
     }
     else{
@@ -1637,9 +1646,11 @@ void RegWrite( DecodedInstr* d, int val, int *changedReg) {
    }
    if(d->type == J){
 	//If there is a jump, no register is changed
+	printf("Opcode %x", d->op);
 	if(d->op == 0x03){
 		*changedReg = 31;
-		//mips.registers[*changedReg] = mips.pc;
+		printf("R31 %8.8x\n", mips.registers[*changedReg]);
+		mips.registers[*changedReg] = mips.registers[*changedReg] + 4;
 		return;
 	}
 	*changedReg = -1;
