@@ -1303,7 +1303,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
       }
       if(strcmp(f, "25") == 0){
 	//printf("Rs:%u, Rt:%u\n", rVals->R_rs, rVals->R_rt);
-	return rVals->R_rs | rVals->R_rt;  
+	return mips.registers[rVals->R_rs] | mips.registers[rVals->R_rt];  
       }
       if(strcmp(f, "29") == 0){
 	int a = 0;
@@ -1379,7 +1379,8 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 int b = 0;
 	 a = rVals->R_rd;
 	 b = rVals->R_rs;
-	 if((mips.registers[a] - mips.registers[b] == 0))
+	 
+	 if((mips.registers[a] - mips.registers[b] != 0))
 	 {
 		 //printf("Rd:%i, Rs:%i, result:%i\n", rVals->R_rd, rVals->R_rs, rVals->R_rt);
 		return rVals->R_rt;
@@ -1397,7 +1398,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	if(strcmp(o, "23") == 0){
 	 int pointer = 0;
 	 int offset = 0;
-	 pointer = rVals->R_rd;
+	 pointer = rVals->R_rs;
 	 offset = rVals->R_rt;
 	 //printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
 	 return mips.registers[pointer] + offset; 
@@ -1416,6 +1417,9 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
 	 //pointer stores an address 
 	 pointer = rVals->R_rs;
 	 offset = rVals->R_rt;
+
+	 //printf("Address: %8.8x\n", mips.registers[pointer]);
+	 
 	 //printf("Rs:%i, Rt:%i\n", rVals->R_rs, rVals->R_rt);
 	 return mips.registers[pointer] + offset; 
 	}
@@ -1432,7 +1436,7 @@ int Execute ( DecodedInstr* d, RegVals* rVals) {
       if(d->op == 0x03 || strcmp(o, "03") == 0){
 		//update return address
 		mips.registers[31] = mips.pc;
-		printf("Register 31 during execute%8.8x\n", mips.registers[31]);
+		// printf("Register 31 during execute%8.8x\n", mips.registers[31]);
 		//return the target address
 		//printf("%8.8x\n", rVals->R_rd);
 		return rVals->R_rd;
@@ -1509,13 +1513,16 @@ void UpdatePC ( DecodedInstr* d, int val) {
  */
 int Mem( DecodedInstr* d, int val, int *changedMem) {
     /* Your code goes here */
+
   //lw
   if(d->op == 0x23){
 	//just need to return the value from memory. 
 	//val is the calculated index
 	//lw doesn't update any values in memory, therefore changedMem is not updated
 	*changedMem = -1;
-	return mips.memory[val];
+	int index = (val - 0x00400000)/4;
+	printf("%d\n", index);
+	return mips.memory[index];
   }
   //sw
   if(d->op == 0x2b){
@@ -1527,10 +1534,11 @@ int Mem( DecodedInstr* d, int val, int *changedMem) {
 	//Just need to increment the location of mips.memory with val
 
 	//*changedMem = (val - 0x00401000)/4;
-	*changedMem = 0x00401000 + (4*val);
-	if(*changedMem >= 0x00401000 && *changedMem <= 0x00404000){
+	*changedMem = val;
+	//printf("CHANGED MEM%8.8x", *changedMem);
+	if(*changedMem >= 0x00400000 && *changedMem <= 0x00404000){
 		//printf("Memory location of mips.memory: %8.8x, Memory location of changedMem: %8.8x\n", 0x00401000, *changedMem);
-		int index = (*changedMem - 0x00401000)/4;
+		int index = (*changedMem - 0x00400000)/4;
 		//printf("val: %i\n", index);
 		mips.memory[index] = mips.registers[d->regs.i.rt];
 	}
@@ -1646,10 +1654,10 @@ void RegWrite( DecodedInstr* d, int val, int *changedReg) {
    }
    if(d->type == J){
 	//If there is a jump, no register is changed
-	printf("Opcode %x", d->op);
+	//printf("Opcode %x", d->op);
 	if(d->op == 0x03){
 		*changedReg = 31;
-		printf("R31 %8.8x\n", mips.registers[*changedReg]);
+		//printf("R31 %8.8x\n", mips.registers[*changedReg]);
 		mips.registers[*changedReg] = mips.registers[*changedReg] + 4;
 		return;
 	}

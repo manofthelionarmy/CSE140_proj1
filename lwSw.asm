@@ -1,5 +1,5 @@
 .text
-	lui $a0, 0x0400
+	lui $a0, 0x0040
 	addiu $t5, $0, 0x1000
 	or $a0, $a0, $t5 
 	addu $a1, $a0, $0
@@ -22,3 +22,7 @@ Loop2:
 	lw $t2, 0($a0)
 	addiu $a0, $a0, 8
 	bne  $t2, $t3, Loop2
+	
+Done:
+	li      $v0, 10    
+	syscall
